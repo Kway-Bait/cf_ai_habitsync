@@ -15,5 +15,12 @@
 	"observability": {
 		"enabled": true
 	},
-	"upload_source_maps": true
+	"upload_source_maps": true,
+	"d1_databases": [
+		{
+			"binding": "habitDB",
+			"database_name": "habitDB",
+			"database_id": "a70ce283-5b8a-41bd-8180-ef5eecff6ec0"
+		}
+	]
 }

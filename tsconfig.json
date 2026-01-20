@@ -21,7 +21,11 @@
 		"paths": {
 			"@/*": ["./src/*"]
 		},
-		"types": ["./env.d.ts", "node"]
+		"types": [
+            "./env.d.ts", 
+            "node", 
+            "./worker-configuration.d.ts",
+        ]
 	},
 	"include": [
 		"next-env.d.ts",

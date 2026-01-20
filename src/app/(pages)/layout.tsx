@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { format } from 'date-fns';
 import clsx from 'clsx';
 import { 
     CheckSquare, 
@@ -25,36 +24,23 @@ import { Habit, Entry, Tab, HabitCategory } from '@/app/libs/types';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
+    const [darkMode, setDarkMode] = useState(true);
 
-    const [activeTab, setActiveTab] = useState<Tab>(Tab.DASHBOARD);
-    const [darkMode, setDarkMode] = useState(() => {
-        const saved = localStorage.getItem('theme');
-        return saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches);
-    });
-
-    const [habits, setHabits] = useState<Habit[]>(() => {
-        const saved = localStorage.getItem('habits');
-        return saved ? JSON.parse(saved) : [];
-    });
-    const [entries, setEntries] = useState<Entry[]>(() => {
-        const saved = localStorage.getItem('habit_entries');
-        return saved ? JSON.parse(saved) : [];
-    });
-    const [currentDate, setCurrentDate] = useState(new Date());
+    // const [darkMode, setDarkMode] = useState(() => {
+    //     const saved = localStorage.getItem('theme');
+    //     return saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    // });
 
     // FIX: darkMode not working
-    useEffect(() => {
-        if (darkMode) {
-            document.documentElement.classList.add('dark');
-            localStorage.setItem('theme', 'dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-            localStorage.setItem('theme', 'light');
-        }
-    }, [darkMode]);
-
-    const dateStr = format(currentDate, 'yyyy-MM-dd');
-
+    // useEffect(() => {
+    //     if (darkMode) {
+    //         document.documentElement.classList.add('dark');
+    //         localStorage.setItem('theme', 'dark');
+    //     } else {
+    //         document.documentElement.classList.remove('dark');
+    //         localStorage.setItem('theme', 'light');
+    //     }
+    // }, [darkMode]);
 
     const navList = [
         { href: Tab.DASHBOARD, icon: HomeIcon, label: "Dashboard", mobile_label: "Dashboard"},

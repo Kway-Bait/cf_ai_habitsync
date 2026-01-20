@@ -3,40 +3,45 @@ PRAGMA foreign_keys = ON;
 -- =========================
 -- User
 -- =========================
+DELETE FROM users;
 INSERT INTO users (id, email)
 VALUES (
-    'user1',
+    1,
     'user@gmail.com'
 );
 
 -- =========================
 -- Habits
 -- =========================
-INSERT INTO habits (id, user_id, name, description, frequency)
+DELETE FROM habits;
+INSERT INTO habits (id, user_id, name, description, category, goal)
 VALUES
 (
-    'habit_1',
-    'user_1',
+    1,
+    1,
     'Drink Water',
     'Drink at least 8 glasses of water',
+    'Health',
     8
 ),
 (
-    'habit_2',
-    'user_1',
+    2,
+    1,
     'Read',
     'Read at least 20 minutes',
+    'Productivity',
     1
 );
 
 -- =========================
--- Habit Completions
+-- Entries
 -- =========================
-INSERT INTO habit_completions (id, habit_id, completed_on)
+DELETE FROM entries;
+INSERT INTO entries (id, habit_id, completed_on)
 VALUES
-('hc_1', 'habit_1', '2026-01-13'),
-('hc_2', 'habit_1', '2026-01-14'),
-('hc_3', 'habit_1', '2026-01-15'),
-('hc_4', 'habit_2', '2026-01-14'),
-('hc_5', 'habit_2', '2026-01-16');
+(1, 1, '2026-01-13'),
+(2, 1, '2026-01-14'),
+(3, 1, '2026-01-15'),
+(4, 2, '2026-01-14'),
+(5, 2, '2026-01-16');
 

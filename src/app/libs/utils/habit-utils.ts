@@ -1,0 +1,118 @@
+import { Habit, HabitInfo, HabitSummary, Entry } from '@/app/libs/types';
+import { compareAsc, compareDesc, parseISO, startOfToday, isSameDay } from 'date-fns';
+import { formatDate } from '@/app/libs/utils/date-utils';
+
+export function calculateStreak({
+    viewDate,
+    habitInfo,
+    entries
+} : {
+    viewDate: Date,
+    habitInfo: HabitInfo,
+    entries: Entry[]
+}): number {
+    if (!entries || entries.length === 0) return 0;
+
+    const filteredEntries = entries.filter((e) => (
+        e.habitId === habitInfo.id && compareAsc(parseISO(e.date), viewDate) <= 0
+    ));
+
+    if (filteredEntries.length === 0) return 0;
+
+    filteredEntries.sort((a: Entry, b: Entry) => {
+        return compareDesc(parseISO(a.date), parseISO(b.date));
+    })
+
+    const dates = filteredEntries.map(e => ({
+        date: parseISO(e.date),
+        count: e.count
+    }));
+
+    // Insert entry for today if not exists
+    const fullDates = (isSameDay(dates[0].date, viewDate))? dates : [ { date: viewDate, count: 0 }, ...dates ]; 
+
+    let streak = 0;
+    if (fullDates[0].count === habitInfo.goal) streak++;
+
+    for (let i = 0; i < fullDates.length - 1; i++) {
+        const currentDate: Date = fullDates[i].date;
+        const previousDate: Date = fullDates[i+1].date;
+
+        const diff = (currentDate.getTime() - previousDate.getTime()) / (1000 * 60 * 60 * 24);
+
+        if (diff === 1 && fullDates[i+1].count === habitInfo.goal) {
+            streak++;
+        } else { break; }
+    }
+
+    return streak;
+}
+
+export function calculateHabitSummary({
+    viewDate,
+    habits,
+    entries
+} : {
+    viewDate: Date,
+    habits: Habit[],
+    entries: Entry[],
+}): HabitSummary {
+    let completed: number = 0;
+    let progress: number = 0;
+    let activeStreak: number = 0;
+
+    // Calculate `completed` and `progress`
+    habits.map((h) => {
+        const entry = entries.find((e) => (
+            e.habitId === h.id && isSameDay(parseISO(e.date), viewDate)
+        ));
+
+        if (!entry) return;
+
+        if (entry.count === h.goal) {
+            completed++;
+        } else {
+            const currentProgress = Math.floor(entry.count * 100 / (h.goal * habits.length));
+            progress += currentProgress;
+        }
+    });
+
+    progress += Math.floor(completed * 100 / habits.length);
+
+    // Calculate `activeStreak`
+    const pastEntries = entries.filter((e) => compareAsc(parseISO(e.date), viewDate) <= 0);
+
+    if (pastEntries.length > 0){
+        pastEntries.sort((a: Entry, b: Entry) => {
+            return compareDesc(parseISO(a.date), parseISO(b.date));
+        })
+
+        const dates = pastEntries.map(e => ({
+            date: parseISO(e.date),
+            count: e.count
+        }));
+
+        const fullDates = (isSameDay(dates[0].date, viewDate))? dates : [ { date: viewDate, count: 0 }, ...dates ]; 
+
+        var currentDateEntryCount = fullDates[0].count;
+        if (currentDateEntryCount > 0) activeStreak++;
+        for (let i = 0; i < fullDates.length - 1; i++) {
+            const currentDate: Date = fullDates[i].date;
+            const previousDate: Date = fullDates[i+1].date;
+
+            if (!isSameDay(currentDate, previousDate)){
+                const diff = (currentDate.getTime() - previousDate.getTime()) / (1000 * 60 * 60 * 24);
+
+                // By pass "today no entry" case, to preserve past streak
+                if (diff === 1 && (isSameDay(currentDate, startOfToday()) || currentDateEntryCount > 0)) {
+                    activeStreak++;
+                    currentDateEntryCount = 0; 
+                } else { break; }
+            }
+
+            currentDateEntryCount += fullDates[i+1].count;
+        }
+    }
+
+    return { completed, progress, activeStreak };
+}

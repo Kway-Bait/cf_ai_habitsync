@@ -1,21 +1,33 @@
-import React from 'react';
-import { Habit, Entry } from '@/app/libs/types';
+import { HabitCardType, Entry } from '@/app/libs/types';
 import { CATEGORY_ICONS } from '@/app/libs/constants';
-import { 
+import { createEntry, deleteEntriesByDate } from '../action';
+import {
     CheckCircle2, 
     Circle, 
     Trophy 
 } from 'lucide-react';
+import clsx from 'clsx';
 
-interface HabitCardProps {
-    habit: Habit;
-    entry: Entry | undefined;
-    onToggle: (habitId: string) => void;
-}
-
-const HabitCard: React.FC<HabitCardProps> = ({ habit, entry, onToggle }) => {
+export default function HabitCard({
+    habit,
+    entry,
+    viewDate,
+} : {
+    habit: HabitCardType,
+    entry: Entry,
+    viewDate: Date,
+}) {
     const isCompleted = (entry?.count ?? 0) >= habit.goal;
     const progress = entry?.count ?? 0;
+
+    async function onToggle(habitId: string) : Promise<void> {
+        const props = { habitId: habitId, date: viewDate };
+        if (entry.count == habit.goal) {
+            await deleteEntriesByDate(props);
+        }else {
+            await createEntry(props);
+        }
+    }
 
     return (
         <div 
@@ -28,19 +40,23 @@ const HabitCard: React.FC<HabitCardProps> = ({ habit, entry, onToggle }) => {
         >
             <div className="flex items-start justify-between">
                 <div className="flex items-center space-x-4">
-                    <div className={`p-4 rounded-2xl transition-colors ${
-                        isCompleted 
-                        ? 'bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400' 
-                        : 'bg-slate-50 dark:bg-slate-800 text-gray-600'
-                    }`}>
+                    <div className={clsx(
+                        "p-4 rounded-2xl transition-colors",
+                        {
+                            'bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400': isCompleted,
+                            'bg-slate-50 dark:bg-slate-800 text-gray-600': !isCompleted,
+                        }
+                    )}>
                         {CATEGORY_ICONS[habit.category]}
                     </div>
                     <div>
-                        <h3 className={`font-bold text-lg leading-tight transition-all ${
-                            isCompleted 
-                            ? 'text-indigo-900 dark:text-indigo-200 line-through opacity-60' 
-                            : 'text-gray-900 dark:text-white group-hover:text-indigo-600'
-                        }`}>
+                        <h3 className={clsx(
+                            "font-bold text-lg leading-tight transition-all", 
+                            {
+                                'text-indigo-900 dark:text-indigo-200 line-through opacity-60': isCompleted,
+                                'text-gray-900 dark:text-white group-hover:text-indigo-600': !isCompleted,
+                            }
+                        )}>
                             {habit.name}
                         </h3>
                         <div className="flex items-center mt-1 space-x-3">
@@ -48,7 +64,12 @@ const HabitCard: React.FC<HabitCardProps> = ({ habit, entry, onToggle }) => {
                                 {habit.category}
                             </span>
                             {habit.streak > 0 && (
-                                <span className="flex items-center text-[10px] font-bold text-orange-500">
+                                <span className={clsx(
+                                    "flex items-center text-[10px] font-bold text-orange-500",
+                                    {
+                                        "brightness-75 italic": entry.count < habit.goal,
+                                    }
+                                )}>
                                     <Trophy className="w-2.5 h-2.5 mr-1" /> {habit.streak}d streak
                                 </span>
                             )}
@@ -93,6 +114,3 @@ const HabitCard: React.FC<HabitCardProps> = ({ habit, entry, onToggle }) => {
         </div>
     );
 };
-
-export default HabitCard;
-

@@ -4,8 +4,9 @@ PRAGMA foreign_keys = ON;
 -- =========================
 -- Users
 -- =========================
+DROP TABLE IF EXISTS users;
 CREATE TABLE IF NOT EXISTS users (
-    id TEXT PRIMARY KEY,
+    id INT PRIMARY KEY,
     email TEXT NOT NULL UNIQUE,
     created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
@@ -13,13 +14,14 @@ CREATE TABLE IF NOT EXISTS users (
 -- =========================
 -- Habits
 -- =========================
+DROP TABLE IF EXISTS habits;
 CREATE TABLE IF NOT EXISTS habits (
-    id TEXT PRIMARY KEY,
+    id INT PRIMARY KEY,
     user_id TEXT NOT NULL,
     name TEXT NOT NULL,
     description TEXT,
     category TEXT NOT NULL,
-    goal INTEGER NOT NULL CHECK (frequency >= 1),
+    goal INTEGER NOT NULL CHECK (goal >= 1),
     created_at TEXT NOT NULL DEFAULT (datetime('now')),
     archived_at TEXT,
 
@@ -29,19 +31,18 @@ CREATE TABLE IF NOT EXISTS habits (
 );
 
 -- =========================
--- Habit Completions
+-- Entries
 -- =========================
-CREATE TABLE IF NOT EXISTS habit_completions (
-    id TEXT PRIMARY KEY,
+DROP TABLE IF EXISTS entries;
+CREATE TABLE IF NOT EXISTS entries (
+    id INT PRIMARY KEY,
     habit_id TEXT NOT NULL,
     completed_on TEXT NOT NULL, -- YYYY-MM-DD
     created_at TEXT NOT NULL DEFAULT (datetime('now')),
 
     FOREIGN KEY (habit_id)
     REFERENCES habits(id)
-    ON DELETE CASCADE,
-
-    UNIQUE (habit_id, completed_on)
+    ON DELETE CASCADE
 );
 
 -- =========================
@@ -50,5 +51,5 @@ CREATE TABLE IF NOT EXISTS habit_completions (
 CREATE INDEX IF NOT EXISTS idx_habits_user_id
 ON habits(user_id);
 
-CREATE INDEX IF NOT EXISTS idx_completions_habit_date
-ON habit_completions(habit_id, completed_on);
+CREATE INDEX IF NOT EXISTS idx_entries_habit_date
+ON entries(habit_id, completed_on);

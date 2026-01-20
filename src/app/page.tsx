@@ -12,11 +12,7 @@ import {
     ArrowUpRight, 
 } from 'lucide-react';
 
-export function Page({ 
-    onLogin 
-} : {
-    onLogin: () => void
-}) {
+export default function Page() {
     return (
         <div className="min-h-screen bg-white dark:bg-slate-950 font-sans selection:bg-indigo-100 selection:text-indigo-900 transition-colors duration-300">
             {/* Sticky Glass Navbar */}
@@ -190,7 +186,7 @@ export function Page({
                     </p>
                     <div className="pt-8">
                         <button 
-                            onClick={onLogin}
+                            // onClick={onLogin}
                             className="group bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-12 py-6 rounded-[2.5rem] font-black text-xl shadow-2xl transition-all hover:scale-105 active:scale-95 flex items-center justify-center mx-auto space-x-4"
                         >
                             <span>Join HabitSync Free</span>

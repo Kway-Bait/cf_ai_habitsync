@@ -1,6 +1,5 @@
 import { Habit, HabitInfo, HabitSummary, Entry } from '@/app/libs/types';
-import { compareAsc, compareDesc, parseISO, startOfToday, isSameDay } from 'date-fns';
-import { formatDate } from '@/app/libs/utils/date-utils';
+import { add, compareAsc, compareDesc, parseISO, startOfToday, isSameDay } from 'date-fns';
 
 export function calculateStreak({
     viewDate,
@@ -115,4 +114,45 @@ export function calculateHabitSummary({
     }
 
     return { completed, progress, activeStreak };
+}
+
+export function calculateHabitReview({
+    habits,
+    entries
+} : {
+    habits: Habit[],
+    entries: Entry[],
+}) : { successRate: number, longestStreak: number } {
+
+    // SuccessRate
+    const startDate: Date = add(startOfToday(), { weeks: -1 });
+    const totalHabits: number = habits.length * 7;
+
+    const completedEntries: number = entries.filter((e) => {
+        const habit: Habit = habits.find((h) => h.id === e.habitId) as Habit;
+        return compareAsc(e.date, startDate) >= 0 && e.count === habit.goal;
+    }).length;
+
+    // longestStreak
+    const sortedEntries = entries.sort((a: Entry, b: Entry) => {
+        return compareDesc(parseISO(a.date), parseISO(b.date));
+    })
+
+    let streak = 1, longestStreak = 1;
+    for (let i = 0; i < sortedEntries.length - 1; i++) {
+        const currentDate: Date = parseISO(sortedEntries[i].date);
+        const previousDate: Date = parseISO(sortedEntries[i+1].date);
+
+        if (!isSameDay(currentDate, previousDate)){
+            const diff = (currentDate.getTime() - previousDate.getTime()) / (1000 * 60 * 60 * 24);
+
+            streak = (diff === 1)? streak + 1 : 1;
+            longestStreak = Math.max(longestStreak, streak);
+        }
+    }
+
+    return {
+        successRate: Math.round(completedEntries * 100 / totalHabits),
+        longestStreak: longestStreak,
+    }
 }

@@ -1,24 +1,26 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
+import { useHabitContext } from '@/app/context/habit-context';
+import { format, subDays, startOfMonth, endOfMonth, eachDayOfInterval } from 'date-fns';
+import { useTheme } from 'next-themes';
+import { calculateHabitReview } from '@/app/libs/utils/habit-utils';
 import { 
     XAxis, 
-    YAxis, 
     Tooltip, 
     ResponsiveContainer, 
     AreaChart, 
     Area 
 } from 'recharts';
-import { Habit, Entry } from '@/app/libs/types';
-import { format, subDays, startOfMonth, endOfMonth, eachDayOfInterval } from 'date-fns';
 
 export default function StatsDashboard() {
-    const habits: Habit[] = [];
-    const entries: Entry[] = [];
+    const { habits, entries } = useHabitContext();
+    const { theme } = useTheme();
 
-    const isDark = document.documentElement.classList.contains('dark');
+    const { successRate, longestStreak } = calculateHabitReview({ habits, entries });
 
-    // Weekly trend data
+    const isDark = theme === 'dark';
+
     const weeklyData = useMemo(() => {
         return Array.from({ length: 7 }).map((_, i) => {
             const date = subDays(new Date(), 6 - i);
@@ -31,7 +33,6 @@ export default function StatsDashboard() {
         });
     }, [entries]);
 
-    // Heatmap data for current month
     const monthDays = useMemo(() => {
         const start = startOfMonth(new Date());
         const end = endOfMonth(new Date());
@@ -57,8 +58,8 @@ export default function StatsDashboard() {
                 {[
                     { label: 'Habits Active', value: habits.length, color: 'text-indigo-600' },
                     { label: 'Check-ins', value: entries.length, color: 'text-emerald-500' },
-                    { label: 'Success Rate', value: '84%', color: 'text-orange-500' },
-                    { label: 'Longest Streak', value: '12d', color: 'text-purple-500' },
+                    { label: 'Success Rate', value: `${successRate}%`, color: 'text-orange-500' },
+                    { label: 'Longest Streak', value: `${longestStreak}d`, color: 'text-purple-500' },
                 ].map((stat, i) => (
                         <div key={i} className="bg-white dark:bg-slate-900 p-8 rounded-[2rem] border border-gray-100 dark:border-slate-800 shadow-sm">
                             <p className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-1">{stat.label}</p>
@@ -126,8 +127,8 @@ export default function StatsDashboard() {
                         <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mt-1">Monthly Heatmap</p>
                     </div>
                     <div className="grid grid-cols-7 gap-2.5">
-                        {['Sn', 'M', 'Tu', 'W', 'Th', 'F', 'St'].map(d => (
-                            <div key={d} className="text-center text-[10px] font-black text-gray-400 dark:text-gray-600 mb-2">{d}</div>
+                        {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((d, idx) => (
+                            <div key={idx} className="text-center text-[10px] font-black text-gray-400 dark:text-gray-600 mb-2">{d}</div>
                         ))}
                         {monthDays.map((day, idx) => (
                             <div 

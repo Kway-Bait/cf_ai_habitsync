@@ -1,7 +1,10 @@
-import { useMemo } from 'react';
+'use client';
+
+import { useHabitContext } from '@/app/context/habit-context';
 import Link from 'next/link';
-import { Habit, Entry, Tab } from '@/app/libs/types';
-import { format } from 'date-fns';
+import { Tab } from '@/app/libs/types';
+import { startOfToday } from 'date-fns';
+import { calculateHabitSummary } from '@/app/libs/utils/habit-utils';
 import { 
     Flame, 
     Target, 
@@ -17,25 +20,8 @@ import {
 } from 'lucide-react';
 
 export default function HomeView() {
-    const habits: Habit[] = [];
-    const entries: Entry[] = [];
-    const currentDate: Date = new Date();
-
-    const dateStr = format(currentDate, 'yyyy-MM-dd');
-
-    const todaySummary = useMemo(() => {
-        const todayEntries = entries.filter(e => e.date === dateStr);
-        const completed = habits.filter(h => {
-            const entry = todayEntries.find(e => e.habitId === h.id);
-            return (entry?.count ?? 0) >= h.goal;
-        }).length;
-        return { completed, total: habits.length };
-    }, [habits, entries, dateStr]);
-
-    const topStreak = useMemo(() => {
-        if (habits.length === 0) return 0;
-        return Math.max(...habits.map(h => h.streak));
-    }, [habits]);
+    const { habits, entries } = useHabitContext();
+    const { progress, completed, activeStreak } = calculateHabitSummary({ habits, entries, viewDate: startOfToday() });
 
     return (
         <div className="space-y-12 animate-in fade-in slide-in-from-bottom-6 duration-700 pb-12">
@@ -53,7 +39,7 @@ export default function HomeView() {
                         Welcome back, <br /><span className="text-indigo-200">Alex.</span>
                     </h1>
                     <p className="text-lg text-indigo-50 mb-10 leading-relaxed font-medium">
-                        You've maintained consistency for 12 days straight. Today's focus is your mindfulness routine.
+                        You've maintained consistency for {activeStreak} days straight. Today's focus is your mindfulness routine.
                     </p>
 
                     <div className="flex flex-wrap gap-4">
@@ -81,8 +67,8 @@ export default function HomeView() {
                     <div className="w-14 h-14 bg-orange-100 dark:bg-orange-900/30 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                         <Flame className="w-8 h-8 text-orange-600" />
                     </div>
-                    <h3 className="text-xs font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-2">Longest Streak</h3>
-                    <p className="text-4xl font-black text-gray-900 dark:text-white">{topStreak} Days</p>
+                    <h3 className="text-xs font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-2">Active Streak</h3>
+                    <p className="text-4xl font-black text-gray-900 dark:text-white">{activeStreak} Days</p>
                     <div className="mt-4 flex items-center text-xs font-bold text-orange-500">
                         <Trophy className="w-3 h-3 mr-1" /> Elite Level Performance
                     </div>
@@ -93,11 +79,11 @@ export default function HomeView() {
                         <CheckCircle2 className="w-8 h-8 text-emerald-600" />
                     </div>
                     <h3 className="text-xs font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-2">Today's Progress</h3>
-                    <p className="text-4xl font-black text-gray-900 dark:text-white">{todaySummary.completed} / {todaySummary.total}</p>
+                    <p className="text-4xl font-black text-gray-900 dark:text-white">{completed} / {habits.length}</p>
                     <div className="mt-4 h-1.5 w-full bg-gray-100 dark:bg-slate-800 rounded-full overflow-hidden">
                         <div 
                             className="h-full bg-emerald-500 transition-all duration-1000" 
-                            style={{ width: `${(todaySummary.completed / (todaySummary.total || 1)) * 100}%` }}
+                            style={{ width: `${(completed / (habits.length || 1)) * 100}%` }}
                         />
                     </div>
                 </div>
@@ -108,7 +94,7 @@ export default function HomeView() {
                     </div>
                     <h3 className="text-xs font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-2">Overall Success</h3>
                     <p className="text-4xl font-black text-gray-900 dark:text-white">
-                        {Math.round((todaySummary.completed / (todaySummary.total || 1)) * 100)}%
+                        {progress}%
                     </p>
                     <Link 
                         href="/review"
@@ -142,8 +128,8 @@ export default function HomeView() {
                     ].map((action, i) => (
                             <Link
                                 key={i}
-                                href={`/${action.href}`}
-                                className="flex items-center p-6 bg-white dark:bg-slate-900 rounded-[2rem] border border-gray-100 dark:border-slate-800 shadow-sm hover:shadow-md transition-all group"
+                                href={action.href}
+                                className="flex items-center p-6 bg-white dark:bg-slate-900 hover:brightness-125 rounded-[2rem] border border-gray-100 dark:border-slate-800 shadow-sm hover:shadow-md transition-all group"
                             >
                                 <div className={`w-12 h-12 rounded-xl flex items-center justify-center mr-4 transition-transform group-hover:rotate-12 ${action.color}`}>
                                     <action.icon className="w-6 h-6" />

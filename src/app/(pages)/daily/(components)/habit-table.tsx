@@ -1,22 +1,21 @@
-import { Habit, Entry } from '@/app/libs/types';
+'use client';
+
+import { useHabitContext } from '@/app/context/habit-context';
+import { Habit } from '@/app/libs/types';
 import { calculateStreak } from '@/app/libs/utils/habit-utils';
-import HabitCard from './habit-card';
 import { parseISO, isSameDay } from 'date-fns';
+import HabitCard from './habit-card';
 
 export default function HabitTable({
     viewDate,
-    habits,
-    entries
 } : {
     viewDate: Date,
-    habits: Habit[],
-    entries: Entry[],
 }) {
+    const { habits, entries } = useHabitContext();
+
     function HabitCardWrapper({ habit } : { habit: Habit }) {
-        const entry = (
-            entries.find((e) => e.habitId === habit.id && isSameDay(parseISO(e.date), viewDate)) ??
-                { habitId: habit.id, date: viewDate.toDateString(), count: 0 }
-        );
+        const entry = entries.find((e) => e.habitId === habit.id && isSameDay(parseISO(e.date), viewDate)) ??
+                { habitId: habit.id, date: viewDate.toDateString(), count: 0 };
 
         const streak = calculateStreak({
             viewDate: viewDate,

@@ -6,27 +6,6 @@ import { dbGetEntries, dbCreateEntry, dbDeleteEntriesByDate } from '@/app/libs/d
 import { format } from 'date-fns';
 import { refresh } from 'next/cache';
 
-export async function fetchHabits({ 
-    user
-} : {
-    user: User
-}): Promise<Habit[]> {
-    return await dbGetUserHabits({ user: user });
-}
-
-export async function fetchEntries({
-    habits
-} : {
-    habits: Habit[]
-}): Promise<Entry[]> {
-    const results = await Promise.all(habits.map(async (habit) => {
-        const result = await dbGetEntries({ habitId: habit.id });
-        return result;
-    }));
-
-    return results.flat();
-}
-
 export async function createEntry({
     habitId,
     date

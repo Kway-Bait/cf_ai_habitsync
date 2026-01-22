@@ -2,7 +2,7 @@
 
 import { User, Habit } from '@/app/libs/types';
 import { HabitSchema } from '@/app/libs/schemas/habit-schema';
-import { dbCreateUserHabits, dbGetHabit } from '@/app/libs/db/habit';
+import { dbCreateHabit, dbGetHabit, dbDeleteHabit } from '@/app/libs/db/habit';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
@@ -49,7 +49,7 @@ export async function updateHabit(
     const { name, category, goal } = validatedFields.data;
 
     try {
-        await dbCreateUserHabits({ 
+        await dbCreateHabit({ 
             user,
             habit: { name, category, goal }
         });
@@ -59,6 +59,17 @@ export async function updateHabit(
             message: 'Database Error: Failed to Update Invoice.'
         };
     }
+
+    revalidatePath('/manage');
+    redirect('/manage');
+}
+
+export async function deleteHabit({
+    habitId,
+} : {
+    habitId: string,
+}): Promise<void> {
+    await dbDeleteHabit({ habitId });
 
     revalidatePath('/manage');
     redirect('/manage');

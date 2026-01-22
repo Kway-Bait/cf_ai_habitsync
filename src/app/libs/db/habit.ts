@@ -52,7 +52,7 @@ export async function dbGetHabits({
     return data;
 }
 
-export async function dbCreateUserHabits({
+export async function dbCreateHabit({
     user,
     habit,
 } : {
@@ -65,5 +65,18 @@ export async function dbCreateUserHabits({
         VALUES (?, ?, ?, ?)
     `)
         .bind(user.id, habit.name, habit.category, habit.goal)
+        .run();
+}
+
+export async function dbDeleteHabit({
+    habitId,
+} : {
+    habitId: string,
+}) {
+    const { env } = getCloudflareContext();
+    await env.habitDB.prepare(
+    "DELETE FROM habits WHERE id = ?"
+    )
+        .bind(habitId)
         .run();
 }

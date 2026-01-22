@@ -3,7 +3,7 @@
 import { z } from 'zod';
 import { User } from '@/app/libs/types';
 import { HabitSchema } from '@/app/libs/schemas/habit-schema';
-import { dbCreateUserHabits } from '@/app/libs/db/habit';
+import { dbCreateHabit } from '@/app/libs/db/habit';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
@@ -41,7 +41,7 @@ export async function createHabit(
     const { name, category, goal } = validatedFields.data;
 
     try {
-        await dbCreateUserHabits({ 
+        await dbCreateHabit({ 
             user,
             habit: { name, category, goal }
         });

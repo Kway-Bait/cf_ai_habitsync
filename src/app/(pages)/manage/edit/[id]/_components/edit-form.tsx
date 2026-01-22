@@ -1,10 +1,15 @@
 'use client';
 
-import { useState, useActionState } from 'react';
+import { useState, useEffect, createRef, useActionState } from 'react';
 import Link from 'next/link';
 import { Habit, User, Tab, HabitCategory } from '@/app/libs/types';
 import { CATEGORY_ICONS } from '@/app/libs/constants';
-import { updateHabit, State } from '../action';
+import { updateHabit, deleteHabit, State } from '../action';
+import {
+    Trash2,
+    Check,
+    X,
+} from 'lucide-react';
 import clsx from 'clsx';
 
 export default function EditForm({
@@ -12,7 +17,25 @@ export default function EditForm({
 } : {
     habit: Habit,
 }) {
+    const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
     const [habitCategory, setHabitCategory] = useState<HabitCategory>(habit.category);
+
+    const deleteRef = createRef<HTMLDivElement>();
+
+    useEffect(() => {
+        function handleClickOutside(event: any){
+            if (deleteRef.current && !deleteRef.current.contains(event.target)) {
+                setShowDeleteDialog(false);
+            }
+        }
+
+        document.addEventListener("mousedown", handleClickOutside);
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        }
+    })
+
     const sample_user: User = {
         id: '1',
     }
@@ -24,7 +47,31 @@ export default function EditForm({
     return (
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 flex items-center justify-center p-6">
             <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] w-full max-w-md p-10 shadow-2xl animate-in zoom-in-95 duration-200 border border-gray-100 dark:border-slate-800">
-                <h2 className="text-3xl font-black text-gray-900 dark:text-white mb-8">Edit Habit</h2>
+                <div className="flex items-start space-x-5">
+                    <h2 className="text-3xl font-black text-gray-900 dark:text-white mb-8">Edit Habit</h2>
+                    {showDeleteDialog ? (
+                        <div 
+                            ref={deleteRef}
+                            className="flex space-x-2"
+                        >
+                            <Check 
+                                onClick={() => deleteHabit({ habitId: habit.id })} 
+                                className="size-8 text-green-500 cursor-pointer"
+                            />
+                            <X 
+                                onClick={() => setShowDeleteDialog(false)} 
+                                className="size-8 text-red-500 cursor-pointer"
+                            />
+                        </div>
+                    ) : (
+                        <button
+                            onClick={() => setShowDeleteDialog(true)}
+                            className="cursor-pointer"
+                        >
+                            <Trash2 className="size-8 text-red-500" />
+                        </button>
+                    )}
+                </div>
                 <form action={formAction} className="space-y-8">
                     <div>
                         <label className="block text-xs font-bold text-gray-400 dark:text-gray-500 mb-3 uppercase tracking-widest">What's the habit name?</label>

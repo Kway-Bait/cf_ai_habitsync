@@ -41,6 +41,7 @@ export default function NavBar() {
     const navList = [
         { href: Tab.DASHBOARD, icon: HomeIcon, label: "Dashboard", mobile_label: "Dashboard"},
         { href: Tab.DAILY, icon: CheckSquare, label: "Daily Habits", mobile_label: "Daily" },
+        { href: Tab.MANAGE, icon: Settings, label: "Manage Habits", mobile_label: "Habits"},
         { href: Tab.REVIEW, icon: BarChart3, label: "Progress Review", mobile_label: "Review" },
         { href: Tab.CHAT, icon: MessageCircle, label: "AI Habit Coach", mobile_label: "Chatbot" },
     ];
@@ -99,10 +100,6 @@ export default function NavBar() {
                     >
                         {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
                         <span className="font-semibold text-sm">{darkMode ? 'Light Mode' : 'Dark Mode'}</span>
-                    </button>
-                    <button className="flex items-center space-x-3 w-full px-4 py-3 rounded-xl text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors">
-                        <Settings className="w-5 h-5" />
-                        <span className="font-semibold text-sm">Settings</span>
                     </button>
                 </div>
             </aside>

@@ -7,10 +7,8 @@ export interface User {
 export interface Habit {
     id: string;
     name: string;
-    description: string;
     category: HabitCategory;
     goal: number; // times per day
-    createdAt: string;
 }
 
 export interface HabitCardType extends Habit {
@@ -46,6 +44,7 @@ export interface Message {
 export enum Tab {
     DASHBOARD = '/dashboard',
     DAILY = '/daily',
+    MANAGE = '/manage',
     REVIEW = '/review',
     CHAT = '/chatbot'
 }

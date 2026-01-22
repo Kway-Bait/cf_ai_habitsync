@@ -29,6 +29,9 @@ export default function HabitCard({
         }
     }
 
+    const icon = CATEGORY_ICONS[habit.category];
+    const CategoryIcon = icon.icon;
+
     return (
         <div 
             onClick={() => onToggle(habit.id)}
@@ -47,7 +50,7 @@ export default function HabitCard({
                             'bg-slate-50 dark:bg-slate-800 text-gray-600': !isCompleted,
                         }
                     )}>
-                        {CATEGORY_ICONS[habit.category]}
+                        <CategoryIcon className={`size-5 ${icon.color}`} />
                     </div>
                     <div>
                         <h3 className={clsx(

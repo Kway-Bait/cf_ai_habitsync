@@ -6,7 +6,7 @@ PRAGMA foreign_keys = ON;
 -- =========================
 DROP TABLE IF EXISTS users;
 CREATE TABLE IF NOT EXISTS users (
-    id INT PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     email TEXT NOT NULL UNIQUE,
     created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
@@ -16,10 +16,9 @@ CREATE TABLE IF NOT EXISTS users (
 -- =========================
 DROP TABLE IF EXISTS habits;
 CREATE TABLE IF NOT EXISTS habits (
-    id INT PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id TEXT NOT NULL,
     name TEXT NOT NULL,
-    description TEXT,
     category TEXT NOT NULL,
     goal INTEGER NOT NULL CHECK (goal >= 1),
     created_at TEXT NOT NULL DEFAULT (datetime('now')),
@@ -35,7 +34,7 @@ CREATE TABLE IF NOT EXISTS habits (
 -- =========================
 DROP TABLE IF EXISTS entries;
 CREATE TABLE IF NOT EXISTS entries (
-    id INT PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     habit_id TEXT NOT NULL,
     completed_on TEXT NOT NULL, -- YYYY-MM-DD
     created_at TEXT NOT NULL DEFAULT (datetime('now')),

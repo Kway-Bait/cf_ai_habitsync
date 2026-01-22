@@ -1,7 +1,7 @@
 'use server';
 
 import { User, Habit, Entry } from '@/app/libs/types';
-import { dbGetUserHabits } from '@/app/libs/db/habit';
+import { dbGetHabits } from '@/app/libs/db/habit';
 import { dbGetEntries } from '@/app/libs/db/entry';
 
 export async function fetchHabits({ 
@@ -9,7 +9,7 @@ export async function fetchHabits({
 } : {
     user: User
 }): Promise<Habit[]> {
-    return await dbGetUserHabits({ user: user });
+    return await dbGetHabits({ user: user });
 }
 
 export async function fetchEntries({

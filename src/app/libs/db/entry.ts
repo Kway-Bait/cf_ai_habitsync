@@ -1,15 +1,14 @@
 'use server';
 
 import { getCloudflareContext } from '@opennextjs/cloudflare';
-import { Habit, Entry } from '@/app/libs/types';
-
-const { env } = getCloudflareContext();
+import { Entry } from '@/app/libs/types';
 
 export async function dbGetEntries({
     habitId,
 } : {
     habitId: string,
 }): Promise<Entry[]> {
+    const { env } = getCloudflareContext();
     const { results } = await env.habitDB.prepare(`
         SELECT habit_id, COUNT(*) AS [count], completed_on, created_at
         FROM entries
@@ -37,6 +36,7 @@ export async function dbCreateEntry({
     habitId: string,
     date: string,
 }): Promise<void> {
+    const { env } = getCloudflareContext();
     await env.habitDB.prepare(`
         INSERT INTO entries (habit_id, completed_on)
         VALUES (?, ?)
@@ -52,6 +52,7 @@ export async function dbDeleteEntriesByDate({
     habitId: string,
     date: string,
 }) : Promise<void> {
+    const { env } = getCloudflareContext();
     await env.habitDB.prepare(`
         DELETE FROM entries
         WHERE habit_id = ? AND completed_on = ?

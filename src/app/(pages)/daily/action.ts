@@ -1,8 +1,6 @@
 'use server';
 
-import { Habit, Entry, User } from '@/app/libs/types';
-import { dbGetUserHabits } from '@/app/libs/db/habit';
-import { dbGetEntries, dbCreateEntry, dbDeleteEntriesByDate } from '@/app/libs/db/entry';
+import { dbCreateEntry, dbDeleteEntriesByDate } from '@/app/libs/db/entry';
 import { format } from 'date-fns';
 import { refresh } from 'next/cache';
 

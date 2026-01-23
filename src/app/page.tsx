@@ -1,4 +1,6 @@
 import Link from 'next/link';
+import LoginBtn from '@/app/components/ui/login-btn';
+import { auth } from '@/app/libs/auth';
 import { 
     Sparkles, 
     ArrowRight, 
@@ -12,7 +14,11 @@ import {
     ArrowUpRight, 
 } from 'lucide-react';
 
-export default function Page() {
+export default async function Page() {
+    const session = await auth();
+
+    // return <pre>{JSON.stringify(session)}</pre>;
+
     return (
         <div className="min-h-screen bg-white dark:bg-slate-950 font-sans selection:bg-indigo-100 selection:text-indigo-900 transition-colors duration-300">
             {/* Sticky Glass Navbar */}
@@ -24,14 +30,15 @@ export default function Page() {
                         </div>
                         <span className="text-xl font-black text-slate-900 dark:text-white tracking-tight">HabitSync</span>
                     </div>
-                    <Link 
-                        // href="/login"
-                        href="/dashboard"
-                        className="flex items-center space-x-2 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-full font-bold text-sm shadow-xl shadow-indigo-100 dark:shadow-none transition-all hover:scale-105 active:scale-95"
-                    >
-                        <LogIn className="w-4 h-4" />
-                        <span>Sign In</span>
-                    </Link>
+                    <LoginBtn session={session} />
+                    {/* <Link  */}
+                    {/*     // href="/login" */}
+                    {/*     href="/dashboard" */}
+                    {/*     className="flex items-center space-x-2 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-full font-bold text-sm shadow-xl shadow-indigo-100 dark:shadow-none transition-all hover:scale-105 active:scale-95" */}
+                    {/* > */}
+                    {/*     <LogIn className="w-4 h-4" /> */}
+                    {/*     <span>Sign In</span> */}
+                    {/* </Link> */}
                 </div>
             </nav>
 

@@ -19,7 +19,7 @@ export type State = {
 };
 
 export async function createHabit(
-    user: User,
+    userId: string,
     prevState: State, 
     formData: FormData
 ): Promise<State> {
@@ -42,7 +42,7 @@ export async function createHabit(
 
     try {
         await dbCreateHabit({ 
-            user,
+            userId,
             habit: { name, category, goal }
         });
     } catch (error) {

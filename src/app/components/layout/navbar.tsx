@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { useTheme } from 'next-themes';
 import { Tab } from '@/app/libs/types';
+import { signOut } from 'next-auth/react';
 import {
     CheckSquare, 
     BarChart3, 
@@ -65,12 +66,15 @@ export default function NavBar() {
     return (
         <>
             <aside className="hidden lg:flex flex-col w-72 bg-white dark:bg-slate-900 border-r border-gray-200 dark:border-slate-800 p-6 fixed h-full z-20">
-                <div className="flex items-center space-x-3 mb-12">
+                <Link 
+                    href="/"
+                    className="flex items-center space-x-3 mb-12"
+                >
                     <div className="bg-indigo-600 p-2 rounded-xl">
                         <LayoutDashboard className="text-white w-6 h-6" />
                     </div>
                     <h1 className="text-xl font-bold text-gray-900 dark:text-white">HabitSync</h1>
-                </div>
+                </Link>
 
                 <nav className="flex-1 space-y-2">
                     {navList.map((tab, i)  => (
@@ -87,7 +91,7 @@ export default function NavBar() {
                             <span className="text-sm font-bold text-gray-700 dark:text-gray-200">Alex J.</span>
                         </div>
                         <button 
-                            onClick={() => setDarkMode(!darkMode)}
+                            onClick={() => signOut()}
                             className="p-2 opacity-0 group-hover:opacity-100 hover:bg-red-50 dark:hover:bg-red-900/20 text-red-500 rounded-lg transition-all"
                             title="Sign Out"
                         >

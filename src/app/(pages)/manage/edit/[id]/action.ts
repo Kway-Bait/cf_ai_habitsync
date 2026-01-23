@@ -27,7 +27,7 @@ export async function fetchHabit({
 }
 
 export async function updateHabit(
-    user: User,
+    userId: string,
     prevState: State, 
     formData: FormData
 ): Promise<State> {
@@ -50,7 +50,7 @@ export async function updateHabit(
 
     try {
         await dbCreateHabit({ 
-            user,
+            userId,
             habit: { name, category, goal }
         });
     } catch (error) {

@@ -5,11 +5,11 @@ import { dbGetHabits } from '@/app/libs/db/habit';
 import { dbGetEntries } from '@/app/libs/db/entry';
 
 export async function fetchHabits({ 
-    user
+    userId
 } : {
-    user: User
+    userId: string
 }): Promise<Habit[]> {
-    return await dbGetHabits({ user: user });
+    return await dbGetHabits({ userId });
 }
 
 export async function fetchEntries({

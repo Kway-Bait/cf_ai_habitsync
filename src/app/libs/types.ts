@@ -2,6 +2,8 @@ export type HabitCategory = 'Health' | 'Productivity' | 'Mindfulness' | 'Persona
 
 export interface User {
     id: string;
+    name: string;
+    email: string;
 }
 
 export interface Habit {

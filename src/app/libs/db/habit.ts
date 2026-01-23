@@ -9,37 +9,33 @@ export async function dbGetHabit({
     habitId: string,
 }): Promise<Habit> {
     const { env } = getCloudflareContext();
-    const { results } = await env.habitDB.prepare(
-        "SELECT * FROM habits WHERE id = ? LIMIT 1"
+    const result = await env.habitDB.prepare(
+        "SELECT * FROM habits WHERE id = ?"
     )
         .bind(habitId)
-        .run();
-
-    const result = results[0];
+        .first();
 
     let data: Habit = {
-        id: (result.id as number).toString(),
-        name: result.name as string,
-        category: result.category as HabitCategory,
-        goal: result.goal as number,
+        id: (result?.id as number).toString(),
+        name: result?.name as string,
+        category: result?.category as HabitCategory,
+        goal: result?.goal as number,
     };
 
     return data;
 }
 
 export async function dbGetHabits({
-    user,
+    userId,
 } : {
-    user: User,
+    userId: string,
 }): Promise<Habit[]> {
     const { env } = getCloudflareContext();
     const { results } = await env.habitDB.prepare(
         "SELECT * FROM habits WHERE user_id = ? AND archived_at IS NULL",
     )
-        .bind(user.id)
+        .bind(userId)
         .run();
-
-    // console.log("getUserHabits: ", { results });
 
     let data: Habit[] = results.map(result => ({
         id: (result.id as number).toString(),
@@ -48,15 +44,14 @@ export async function dbGetHabits({
         goal: result.goal as number,
     }));
 
-    // console.log("getUserHabits: ", { data });
     return data;
 }
 
 export async function dbCreateHabit({
-    user,
+    userId,
     habit,
 } : {
-    user: User,
+    userId: string,
     habit: { name: string, category: string, goal: number },
 }) {
     const { env } = getCloudflareContext();
@@ -64,7 +59,7 @@ export async function dbCreateHabit({
         INSERT INTO habits (user_id, name, category, goal)
         VALUES (?, ?, ?, ?)
     `)
-        .bind(user.id, habit.name, habit.category, habit.goal)
+        .bind(userId, habit.name, habit.category, habit.goal)
         .run();
 }
 

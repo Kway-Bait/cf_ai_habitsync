@@ -4,23 +4,29 @@ PRAGMA foreign_keys = ON;
 -- User
 -- =========================
 DELETE FROM users;
-INSERT INTO users (email)
-VALUES ('user@gmail.com');
+INSERT INTO users (id, name, email)
+VALUES (
+    'b02c3cc8-0844-40b8-850e-93f7ef3060ba', 
+    'user',
+    'user@gmail.com'
+);
 
 -- =========================
 -- Habits
 -- =========================
 DELETE FROM habits;
-INSERT INTO habits (user_id, name, category, goal)
+INSERT INTO habits (id, user_id, name, category, goal)
 VALUES
 (
     1,
+    'b02c3cc8-0844-40b8-850e-93f7ef3060ba', 
     'Drink Water',
     'Health',
     8
 ),
 (
-    1,
+    2,
+    'b02c3cc8-0844-40b8-850e-93f7ef3060ba', 
     'Read',
     'Productivity',
     1

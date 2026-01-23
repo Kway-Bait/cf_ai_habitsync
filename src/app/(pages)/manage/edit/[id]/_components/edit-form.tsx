@@ -36,9 +36,7 @@ export default function EditForm({
         }
     })
 
-    const sample_user: User = {
-        id: '1',
-    }
+    const sample_user: string = '1';
 
     const initialState: State = { message: "", errors: {} };
     const updateHabitAction = updateHabit.bind(null, sample_user);

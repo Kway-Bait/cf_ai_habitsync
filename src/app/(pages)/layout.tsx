@@ -1,13 +1,22 @@
 import React from 'react';
 import { HabitContextProvider } from '@/app/context/habit-context';
 import NavBar from '@/app/components/layout/navbar';
+import Unauthorized from '@/app/components/layout/unauthorize';
 import { Habit, User, Entry } from '@/app/libs/types';
 import { fetchHabits, fetchEntries } from './action';
+import { auth } from '@/app/libs/auth';
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
-    const user: User = { id: '1' }; // Sample User
+    const session = await auth();
+    console.log({ session })
 
-    const habits: Habit[] = await fetchHabits({ user });
+    if (!session || !session.user) {
+        return <Unauthorized />
+    }
+
+    const userId: string = '1';
+
+    const habits: Habit[] = await fetchHabits({ userId });
     const entries: Entry[] = await fetchEntries({ habits });
 
     return (

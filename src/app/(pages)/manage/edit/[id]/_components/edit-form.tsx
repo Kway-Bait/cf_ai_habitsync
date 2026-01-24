@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useEffect, createRef, useActionState } from 'react';
+import { useHabitContext } from '@/app/context/habit-context';
 import Link from 'next/link';
-import { Habit, User, Tab, HabitCategory } from '@/app/libs/types';
+import { Habit, Tab, HabitCategory } from '@/app/libs/types';
 import { CATEGORY_ICONS } from '@/app/libs/constants';
 import { updateHabit, deleteHabit, State } from '../action';
 import {
@@ -17,6 +18,7 @@ export default function EditForm({
 } : {
     habit: Habit,
 }) {
+    const { user } = useHabitContext();
     const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
     const [habitCategory, setHabitCategory] = useState<HabitCategory>(habit.category);
 
@@ -36,10 +38,8 @@ export default function EditForm({
         }
     })
 
-    const sample_user: string = '1';
-
     const initialState: State = { message: "", errors: {} };
-    const updateHabitAction = updateHabit.bind(null, sample_user);
+    const updateHabitAction = updateHabit.bind(null, user.id);
     const [state, formAction] = useActionState(updateHabitAction, initialState);
 
     return (
@@ -53,7 +53,7 @@ export default function EditForm({
                             className="flex space-x-2"
                         >
                             <Check 
-                                onClick={() => deleteHabit({ habitId: habit.id })} 
+                                onClick={() => deleteHabit({ userId: user.id, habitId: habit.id })} 
                                 className="size-8 text-green-500 cursor-pointer"
                             />
                             <X 

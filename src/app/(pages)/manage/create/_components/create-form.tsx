@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useActionState } from 'react';
+import { useHabitContext } from '@/app/context/habit-context';
 import Link from 'next/link';
 import { User, HabitCategory, Tab } from '@/app/libs/types';
 import { CATEGORY_ICONS } from '@/app/libs/constants';
@@ -9,13 +10,10 @@ import clsx from 'clsx';
 
 export default function CreateForm() {
     const [habitCategory, setHabitCategory] = useState<HabitCategory>('Health');
-
-    const sample_user: User = {
-        id: '1',
-    };
+    const { user } = useHabitContext();
 
     const initialState: State = { message: "", errors: {} };
-    const createHabitAction = createHabit.bind(null, sample_user);
+    const createHabitAction = createHabit.bind(null, user.id);
     const [state, formAction] = useActionState(createHabitAction, initialState);
 
     return (

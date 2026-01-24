@@ -30,13 +30,26 @@ export async function dbGetEntries({
 }
 
 export async function dbCreateEntry({
+    userId,
     habitId,
     date,
 } : {
+    userId: string,
     habitId: string,
     date: string,
 }): Promise<void> {
     const { env } = getCloudflareContext();
+
+    const result = env.habitDB.prepare(`
+        SELECT * FROM habits WHERE user_id = ?
+    `)
+        .bind(userId)
+        .first();
+
+    if (!result) {
+        throw new Error('Habit doesn\'t belong to user');
+    }
+
     await env.habitDB.prepare(`
         INSERT INTO entries (habit_id, completed_on)
         VALUES (?, ?)
@@ -46,13 +59,26 @@ export async function dbCreateEntry({
 }
 
 export async function dbDeleteEntriesByDate({
+    userId,
     habitId,
     date,
 } : {
+    userId: string,
     habitId: string,
     date: string,
 }) : Promise<void> {
     const { env } = getCloudflareContext();
+
+    const result = env.habitDB.prepare(`
+        SELECT * FROM habits WHERE user_id = ?
+    `)
+        .bind(userId)
+        .first();
+
+    if (!result) {
+        throw new Error('Habit doesn\'t belong to user');
+    }
+
     await env.habitDB.prepare(`
         DELETE FROM entries
         WHERE habit_id = ? AND completed_on = ?

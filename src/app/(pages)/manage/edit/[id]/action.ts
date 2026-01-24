@@ -65,11 +65,13 @@ export async function updateHabit(
 }
 
 export async function deleteHabit({
+    userId,
     habitId,
 } : {
+    userId: string,
     habitId: string,
 }): Promise<void> {
-    await dbDeleteHabit({ habitId });
+    await dbDeleteHabit({ userId, habitId });
 
     revalidatePath('/manage');
     redirect('/manage');

@@ -20,7 +20,7 @@ import {
 } from 'lucide-react';
 
 export default function HomeView() {
-    const { habits, entries } = useHabitContext();
+    const { user, habits, entries } = useHabitContext();
     const { progress, completed, activeStreak } = calculateHabitSummary({ habits, entries, viewDate: startOfToday() });
 
     return (
@@ -36,7 +36,7 @@ export default function HomeView() {
                         <span className="text-xs font-black uppercase tracking-widest text-indigo-50">Operational Insight</span>
                     </div>
                     <h1 className="text-5xl lg:text-7xl font-black mb-6 leading-tight">
-                        Welcome back, <br /><span className="text-indigo-200">Alex.</span>
+                        Welcome back, <br /><span className="text-indigo-200">{user.name}</span>
                     </h1>
                     <p className="text-lg text-indigo-50 mb-10 leading-relaxed font-medium">
                         You've maintained consistency for {activeStreak} days straight. Today's focus is your mindfulness routine.

@@ -64,11 +64,24 @@ export async function dbCreateHabit({
 }
 
 export async function dbDeleteHabit({
+    userId,
     habitId,
 } : {
+    userId: string,
     habitId: string,
 }) {
     const { env } = getCloudflareContext();
+
+    const result = env.habitDB.prepare(`
+        SELECT * FROM habits WHERE user_id = ?
+    `)
+        .bind(userId)
+        .first();
+
+    if (!result) {
+        throw new Error('Habit doesn\'t belong to user');
+    }
+
     await env.habitDB.prepare(
     "DELETE FROM habits WHERE id = ?"
     )

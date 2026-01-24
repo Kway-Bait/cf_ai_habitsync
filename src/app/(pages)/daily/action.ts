@@ -5,29 +5,33 @@ import { format } from 'date-fns';
 import { refresh } from 'next/cache';
 
 export async function createEntry({
+    userId,
     habitId,
     date
 } : {
-    habitId: string
+    userId: string,
+    habitId: string,
     date: string | Date
 }) : Promise<void> {
     if (date instanceof Date) {
         date = format(date, 'yyyy-MM-dd');
     }
-    dbCreateEntry({ habitId: habitId, date: date });
+    dbCreateEntry({ userId, habitId, date });
     refresh();
 }
 
 export async function deleteEntriesByDate({
+    userId,
     habitId,
     date,
 } : {
-    habitId: string
+    userId: string,
+    habitId: string,
     date: string | Date
 }) : Promise<void> {
     if (date instanceof Date) {
         date = format(date, 'yyyy-MM-dd');
     }
-    dbDeleteEntriesByDate({ habitId: habitId, date: date });
+    dbDeleteEntriesByDate({ userId, habitId, date });
     refresh();
 }

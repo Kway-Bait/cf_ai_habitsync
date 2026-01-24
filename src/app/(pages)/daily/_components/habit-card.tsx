@@ -1,3 +1,6 @@
+'use client';
+
+import { useHabitContext } from '@/app/context/habit-context';
 import { HabitCardType, Entry } from '@/app/libs/types';
 import { CATEGORY_ICONS } from '@/app/libs/constants';
 import { createEntry, deleteEntriesByDate } from '../action';
@@ -17,11 +20,12 @@ export default function HabitCard({
     entry: Entry,
     viewDate: Date,
 }) {
+    const { user } = useHabitContext();
     const isCompleted = (entry?.count ?? 0) >= habit.goal;
     const progress = entry?.count ?? 0;
 
     async function onToggle(habitId: string) : Promise<void> {
-        const props = { habitId: habitId, date: viewDate };
+        const props = { userId: user.id, habitId, date: viewDate };
         if (entry.count == habit.goal) {
             await deleteEntriesByDate(props);
         }else {

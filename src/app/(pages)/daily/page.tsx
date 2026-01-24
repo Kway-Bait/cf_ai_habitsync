@@ -7,6 +7,7 @@ import { format, add, compareAsc, isSameDay, startOfToday } from 'date-fns';
 import { calculateHabitSummary } from '@/app/libs/utils/habit-utils';
 import HabitTable from './_components/habit-table';
 import {
+    Sun,
     Plus,
     ChevronLeft,
     CalendarIcon,
@@ -31,24 +32,35 @@ export default function Page() {
                         {(isSameDay(viewDate, startOfToday()))? "Today's" : "Past"} Rituals
                     </h2>
                 </div>
-                <div className="flex items-center space-x-3 bg-white dark:bg-slate-900 p-2 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-800">
-                    <button 
-                        onClick={() => setViewDate(prev => add(prev, { days: -1 }))}
-                        className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-xl transition-colors"
-                    >
-                        <ChevronLeft className="w-5 h-5 text-gray-400" />
-                    </button>
-                    <div className="px-4 py-1 flex items-center space-x-2 text-sm font-bold text-gray-700 dark:text-gray-200">
-                        <CalendarIcon className="w-4 h-4 text-indigo-500" />
-                        <span>{format(viewDate, 'MMMM dd, yyyy')}</span>
+                <div className="flex space-x-3">
+                    <div className="flex items-center space-x-3 bg-white dark:bg-slate-900 p-2 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-800">
+                        <button
+                            onClick={() => setViewDate(startOfToday())}
+                            className="px-4 py-1 flex items-center space-x-2 text-sm font-bold text-gray-700 dark:text-gray-200"
+                        >
+                            <Sun className="w-5 h-5 text-indigo-500" />
+                            <span>Today</span>
+                        </button>
                     </div>
-                    <button 
-                        onClick={() => setViewDate(prev => add(prev, { days: 1 }))}
-                        className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-xl transition-colors"
-                        disabled={compareAsc(viewDate, startOfToday()) >= 0}
-                    >
-                        <ChevronRight className="w-5 h-5 text-gray-400" />
-                    </button>
+                    <div className="flex items-center space-x-3 bg-white dark:bg-slate-900 p-2 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-800">
+                        <button 
+                            onClick={() => setViewDate(prev => add(prev, { days: -1 }))}
+                            className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-xl transition-colors"
+                        >
+                            <ChevronLeft className="w-5 h-5 text-gray-400" />
+                        </button>
+                        <div className="px-4 py-1 flex items-center space-x-2 text-sm font-bold text-gray-700 dark:text-gray-200">
+                            <CalendarIcon className="w-4 h-4 text-indigo-500" />
+                            <span>{format(viewDate, 'MMMM dd, yyyy')}</span>
+                        </div>
+                        <button 
+                            onClick={() => setViewDate(prev => add(prev, { days: 1 }))}
+                            className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-xl transition-colors"
+                            disabled={compareAsc(viewDate, startOfToday()) >= 0}
+                        >
+                            <ChevronRight className="w-5 h-5 text-gray-400" />
+                        </button>
+                    </div>
                 </div>
             </div>
             <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">

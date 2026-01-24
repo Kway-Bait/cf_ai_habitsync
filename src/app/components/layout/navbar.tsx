@@ -20,7 +20,7 @@ import {
 } from 'lucide-react';
 import clsx from 'clsx';
 
-export default function NavBar() {
+export default function NavBar({ name } : { name: string }) {
     const { theme, setTheme } = useTheme();
     const pathname = usePathname();
 
@@ -88,7 +88,7 @@ export default function NavBar() {
                             <div className="w-8 h-8 bg-indigo-100 dark:bg-indigo-900/40 rounded-full flex items-center justify-center">
                                 <User className="w-4 h-4 text-indigo-600" />
                             </div>
-                            <span className="text-sm font-bold text-gray-700 dark:text-gray-200">Alex J.</span>
+                            <span className="text-sm font-bold text-gray-700 dark:text-gray-200">{name}</span>
                         </div>
                         <button 
                             onClick={() => signOut()}

@@ -1,10 +1,9 @@
-import Link from 'next/link';
 import LoginBtn from '@/app/components/ui/login-btn';
+import RedirectBtn from '@/app/components/ui/redirect-btn';
 import { auth } from '@/app/libs/auth';
 import { 
     Sparkles, 
     ArrowRight, 
-    LogIn, 
     Zap, 
     BarChart3, 
     Bot, 
@@ -17,11 +16,8 @@ import {
 export default async function Page() {
     const session = await auth();
 
-    // return <pre>{JSON.stringify(session)}</pre>;
-
     return (
         <div className="min-h-screen bg-white dark:bg-slate-950 font-sans selection:bg-indigo-100 selection:text-indigo-900 transition-colors duration-300">
-            {/* Sticky Glass Navbar */}
             <nav className="fixed top-0 left-0 right-0 z-50 bg-white/70 dark:bg-slate-950/70 backdrop-blur-xl border-b border-slate-200/50 dark:border-slate-800/50 px-6 py-4">
                 <div className="max-w-7xl mx-auto flex items-center justify-between">
                     <div className="flex items-center space-x-3 group cursor-pointer">
@@ -31,20 +27,10 @@ export default async function Page() {
                         <span className="text-xl font-black text-slate-900 dark:text-white tracking-tight">HabitSync</span>
                     </div>
                     <LoginBtn session={session} />
-                    {/* <Link  */}
-                    {/*     // href="/login" */}
-                    {/*     href="/dashboard" */}
-                    {/*     className="flex items-center space-x-2 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-full font-bold text-sm shadow-xl shadow-indigo-100 dark:shadow-none transition-all hover:scale-105 active:scale-95" */}
-                    {/* > */}
-                    {/*     <LogIn className="w-4 h-4" /> */}
-                    {/*     <span>Sign In</span> */}
-                    {/* </Link> */}
                 </div>
             </nav>
 
-            {/* Hero Section */}
             <section className="relative pt-48 pb-32 px-6 overflow-hidden">
-                {/* Dynamic Background Elements */}
                 <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-indigo-500/5 dark:bg-indigo-500/10 rounded-full blur-[120px] -z-10 animate-pulse" />
                 <div className="absolute top-40 right-0 w-[400px] h-[400px] bg-purple-500/5 dark:bg-purple-500/10 rounded-full blur-[100px] -z-10" />
 
@@ -64,30 +50,16 @@ export default async function Page() {
                     </p>
 
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-                        <Link 
-                            // href="/login"
-                            href="/dashboard"
-                            className="w-full sm:w-auto flex items-center justify-center space-x-3 bg-indigo-600 hover:bg-indigo-700 text-white px-12 py-6 rounded-[2.5rem] font-black text-lg shadow-2xl shadow-indigo-100 dark:shadow-none transition-all hover:scale-105 active:scale-95"
-                        >
-                            <span>Start Your Journey</span>
-                            <ArrowRight className="w-5 h-5" />
-                        </Link>
-                        <div className="flex items-center space-x-4 px-6 py-4 rounded-3xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800">
-                            <div className="flex -space-x-3">
-                                {[1, 2, 3].map(i => (
-                                    <div key={i} className="w-10 h-10 rounded-full border-2 border-white dark:border-slate-950 bg-slate-200 dark:bg-slate-800 overflow-hidden">
-                                        <img src={`https://i.pravatar.cc/100?u=${i+10}`} alt="user" className="w-full h-full object-cover" />
-                                    </div>
-                                ))}
+                        <RedirectBtn session={session}>
+                            <div 
+                                className="w-full sm:w-auto flex items-center justify-center space-x-3 bg-indigo-600 hover:bg-indigo-700 text-white px-12 py-6 rounded-[2.5rem] font-black text-lg shadow-2xl shadow-indigo-100 dark:shadow-none transition-all hover:scale-105 active:scale-95"
+                            >
+                                <span>Start Your Journey</span>
+                                <ArrowRight className="w-5 h-5" />
                             </div>
-                            <div className="flex flex-col items-start leading-none">
-                                <span className="text-lg font-black text-slate-900 dark:text-white">12k+</span>
-                                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Active Performers</span>
-                            </div>
-                        </div>
+                        </RedirectBtn>
                     </div>
 
-                    {/* Visualization Section */}
                     <div className="mt-24 max-w-5xl mx-auto p-4 bg-slate-100/50 dark:bg-slate-900/50 rounded-[3.5rem] border border-slate-200 dark:border-slate-800 shadow-2xl relative">
                         <div className="absolute -top-10 -right-10 bg-white dark:bg-slate-900 p-6 rounded-[2rem] shadow-xl border border-slate-100 dark:border-slate-800 hidden lg:block animate-float">
                             <div className="flex items-center space-x-4">
@@ -173,16 +145,12 @@ export default async function Page() {
                                     </div>
                                     <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-4 tracking-tight">{f.title}</h3>
                                     <p className="text-slate-500 dark:text-slate-400 font-medium leading-relaxed">{f.desc}</p>
-                                    <div className="mt-8 flex items-center text-indigo-600 font-bold text-sm cursor-pointer hover:translate-x-1 transition-transform">
-                                        Learn More <ArrowRight className="w-4 h-4 ml-2" />
-                                    </div>
                                 </div>
                             ))}
                     </div>
                 </div>
             </section>
 
-            {/* Final CTA */}
             <section className="py-48 px-6 text-center">
                 <div className="max-w-4xl mx-auto space-y-12">
                     <h2 className="text-5xl md:text-7xl font-black text-slate-900 dark:text-white tracking-tighter">
@@ -191,15 +159,12 @@ export default async function Page() {
                     <p className="text-xl text-slate-500 dark:text-slate-400 font-medium">
                         Join thousands of users today. No credit card required. Just results.
                     </p>
-                    <div className="pt-8">
-                        <button 
-                            // onClick={onLogin}
-                            className="group bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-12 py-6 rounded-[2.5rem] font-black text-xl shadow-2xl transition-all hover:scale-105 active:scale-95 flex items-center justify-center mx-auto space-x-4"
-                        >
+                    <RedirectBtn session={session}>
+                        <div className="group bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-3 py-6 rounded-[2.5rem] font-black text-xl shadow-2xl transition-all hover:scale-105 active:scale-95 flex items-center justify-center mx-auto space-x-4">
                             <span>Join HabitSync Free</span>
                             <ArrowUpRight className="w-6 h-6 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                        </button>
-                    </div>
+                        </div>
+                    </RedirectBtn>
                 </div>
             </section>
 

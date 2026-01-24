@@ -3,9 +3,7 @@
 import HabitCard from './_components/habit-card';
 import Link from 'next/link';
 import { useHabitContext } from '@/app/context/habit-context';
-import {
-    Plus,
-} from 'lucide-react';
+import { Plus } from 'lucide-react';
 
 export default function Page(){
     const { habits } = useHabitContext();

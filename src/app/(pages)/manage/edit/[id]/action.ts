@@ -2,11 +2,11 @@
 
 import { User, Habit } from '@/app/libs/types';
 import { HabitSchema } from '@/app/libs/schemas/habit-schema';
-import { dbCreateHabit, dbGetHabit, dbDeleteHabit } from '@/app/libs/db/habit';
+import { dbUpdateHabit, dbGetHabit, dbDeleteHabit } from '@/app/libs/db/habit';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
-const CreateHabit = HabitSchema.omit({ id: true });
+const UpdateHabit = HabitSchema;
 
 export type State = {
     errors?: {
@@ -31,13 +31,12 @@ export async function updateHabit(
     prevState: State, 
     formData: FormData
 ): Promise<State> {
-    const validatedFields = CreateHabit.safeParse({
+    const validatedFields = UpdateHabit.safeParse({
+        id: formData.get('id'),
         name: formData.get('name'),
         category: formData.get('category'),
         goal: formData.get('goal'),
     });
-
-    console.log({ formData, validatedFields });
 
     if (!validatedFields.success) {
         return {
@@ -46,12 +45,12 @@ export async function updateHabit(
         }
     }
 
-    const { name, category, goal } = validatedFields.data;
+    const { id, name, category, goal } = validatedFields.data;
 
     try {
-        await dbCreateHabit({ 
+        await dbUpdateHabit({ 
             userId,
-            habit: { name, category, goal }
+            habit: { id, name, category, goal }
         });
     } catch (error) {
         console.error(error);

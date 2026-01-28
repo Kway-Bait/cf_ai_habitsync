@@ -29,8 +29,6 @@ export async function createHabit(
         goal: formData.get('goal'),
     });
 
-    console.log({ formData, validatedFields });
-
     if (!validatedFields.success) {
         return {
             errors: validatedFields.error.flatten().fieldErrors,

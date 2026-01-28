@@ -211,6 +211,5 @@ export function calculateRecentPerformance({
         summary = summary.concat(`\n - ${name} (${category}): ${completedDays}/${weeks * 7} [totalEntries: ${totalEntries}/${goal * weeks * 7}]`)
     })
 
-    console.log(summary);
     return summary;
 }

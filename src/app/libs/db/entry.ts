@@ -19,8 +19,6 @@ export async function dbGetEntries({
         .bind(habitId)
         .run();
 
-    // console.log("getEntries: ", { results });
-
     let data: Entry[] = results.map((result) => ({
             habitId: (result.habit_id as number).toString(),
             date: result.completed_on as string,

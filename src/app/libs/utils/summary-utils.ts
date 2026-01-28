@@ -55,7 +55,6 @@ export async function updateWeekSummary({
     userId: string,
 }): Promise<void> {
     const lastHabitSummary: HabitWeekSummary = await dbGetLatestHabitSummary({ userId });
-    // console.log({ lastHabitSummary });
 
     if (!lastHabitSummary.periodStart || differenceInCalendarWeeks(Date(), parseISO(lastHabitSummary.periodEnd)) >= 1) {
         const habits = await dbGetHabits({ userId });
@@ -66,8 +65,6 @@ export async function updateWeekSummary({
 
         const recentPerformance: string = calculateRecentPerformance({ habits, entries, weeks: 1 });
         const weekSummary = await generateWeekSummary({ recentPerformance });
-
-        // console.log({ recentPerformance, weekSummary });
 
         await dbCreateHabitSummary({ 
             userId, 

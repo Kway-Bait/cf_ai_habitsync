@@ -63,6 +63,23 @@ export async function dbCreateHabit({
         .run();
 }
 
+export async function dbUpdateHabit({
+    userId,
+    habit,
+} : {
+    userId: string,
+    habit: Habit, 
+}) {
+    const { env } = getCloudflareContext();
+    await env.habitDB.prepare(`
+        UPDATE habits
+        SET name = ?, category = ?, goal = ?
+        WHERE id = ? AND user_id = ?
+    `)
+        .bind(habit.name, habit.category, habit.goal, habit.id, userId)
+        .run();
+}
+
 export async function dbDeleteHabit({
     userId,
     habitId,

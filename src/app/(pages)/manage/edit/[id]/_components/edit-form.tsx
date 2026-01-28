@@ -24,8 +24,6 @@ export default function EditForm({
 
     const deleteRef = createRef<HTMLDivElement>();
 
-    // FIX: Create instead of Edit
-
     useEffect(() => {
         function handleClickOutside(event: any){
             if (deleteRef.current && !deleteRef.current.contains(event.target)) {
@@ -73,6 +71,13 @@ export default function EditForm({
                     )}
                 </div>
                 <form action={formAction} className="space-y-8">
+                    <input 
+                        id="id"
+                        name="id" 
+                        className="hidden" 
+                        value={habit.id} 
+                        readOnly 
+                    />
                     <div>
                         <label className="block text-xs font-bold text-gray-400 dark:text-gray-500 mb-3 uppercase tracking-widest">What's the habit name?</label>
                         <input 
@@ -155,12 +160,11 @@ export default function EditForm({
                         >
                             Discard
                         </Link>
-                        {}
                         <button 
                             type="submit"
                             className="flex-1 py-5 bg-indigo-600 text-white font-bold rounded-2xl shadow-xl shadow-indigo-100 dark:shadow-none hover:bg-indigo-700 transition-colors"
                         >
-                            Create Habit
+                            Update Habit
                         </button>
                     </div>
                 </form>

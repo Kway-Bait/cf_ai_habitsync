@@ -43,9 +43,6 @@ Rule: When responding, review the statistics provided and relate them to the mes
         }
     ];
 
-    console.log({ messages });
     const response = await env.AI.run(modelName, { messages });
-
-    console.log({ response });
     return response?.response as string;
 }

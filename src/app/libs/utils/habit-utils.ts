@@ -1,5 +1,19 @@
-import { Habit, HabitInfo, HabitSummary, Entry } from '@/app/libs/types';
-import { add, compareAsc, compareDesc, parseISO, startOfToday, isSameDay } from 'date-fns';
+import { 
+    Habit, 
+    HabitInfo, 
+    HabitSummary, 
+    Entry, 
+    HabitCategory 
+} from '@/app/libs/types';
+
+import { 
+    add, 
+    compareAsc, 
+    compareDesc, 
+    parseISO, 
+    startOfToday, 
+    isSameDay 
+} from 'date-fns';
 
 export function calculateStreak({
     viewDate,
@@ -155,4 +169,48 @@ export function calculateHabitReview({
         successRate: Math.round(completedEntries * 100 / totalHabits),
         longestStreak: longestStreak,
     }
+}
+
+export function calculateRecentPerformance({
+    habits,
+    entries,
+    weeks,
+} : {
+    habits: Habit[],
+    entries: Entry[],
+    weeks: number,
+}): string {
+    const startDate: Date = add(startOfToday(), { weeks: -weeks });
+    const filteredEntries = entries.filter((e) => compareAsc(e.date, startDate) >= 0);
+
+    const results: { 
+        id: string,
+        name: string,
+        category: HabitCategory,
+        goal: number,
+        completedDays: number,
+        totalEntries: number,
+    }[] = habits.map(habit => {
+        const completedDays: number = filteredEntries.filter((e) => (
+            e.habitId === habit.id && e.count === habit.goal
+        )).length;
+
+        const totalEntries: number = filteredEntries.map((e) => (
+            (e.habitId === habit.id)? e.count : 0
+        )).reduce((acc, cur) => acc + cur, 0);
+
+        return {
+            ...habit,
+            completedDays: completedDays,
+            totalEntries: totalEntries,
+        };
+    });
+
+    let summary = `Recent Habit Performance (last ${weeks * 7} days):`;
+    results.map(({ name, category, goal, completedDays, totalEntries }) => {
+        summary = summary.concat(`\n - ${name} (${category}): ${completedDays}/${weeks * 7} [totalEntries: ${totalEntries}/${goal * weeks * 7}]`)
+    })
+
+    console.log(summary);
+    return summary;
 }

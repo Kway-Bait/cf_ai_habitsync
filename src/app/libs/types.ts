@@ -38,9 +38,20 @@ export interface Entry {
 }
 
 export interface Message {
-    role: 'user' | 'model';
+    role: 'user' | 'assistant';
     content: string;
     timestamp: Date;
+}
+
+export interface HabitWeekSummary {
+    periodStart: string;
+    periodEnd: string;
+    summary: string;
+}
+
+export interface ProfileSummary {
+    summary: string;
+    updatedAt: string;
 }
 
 export enum Tab {

@@ -22,5 +22,8 @@
 			"database_name": "habitDB",
 			"database_id": "a70ce283-5b8a-41bd-8180-ef5eecff6ec0"
 		}
-	]
+	],
+    "ai": {
+        "binding": "AI",
+    }
 }

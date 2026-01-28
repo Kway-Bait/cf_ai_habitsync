@@ -24,6 +24,8 @@ export default function EditForm({
 
     const deleteRef = createRef<HTMLDivElement>();
 
+    // FIX: Create instead of Edit
+
     useEffect(() => {
         function handleClickOutside(event: any){
             if (deleteRef.current && !deleteRef.current.contains(event.target)) {
@@ -153,6 +155,7 @@ export default function EditForm({
                         >
                             Discard
                         </Link>
+                        {}
                         <button 
                             type="submit"
                             className="flex-1 py-5 bg-indigo-600 text-white font-bold rounded-2xl shadow-xl shadow-indigo-100 dark:shadow-none hover:bg-indigo-700 transition-colors"

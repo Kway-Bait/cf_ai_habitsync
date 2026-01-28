@@ -1,5 +1,6 @@
 import React from 'react';
 import { HabitContextProvider } from '@/app/context/habit-context';
+import { updateProfileSummary, updateWeekSummary } from '@/app/libs/utils/summary-utils';
 import NavBar from '@/app/components/layout/navbar';
 import Unauthorized from '@/app/components/layout/unauthorize';
 import { Habit, Entry, User } from '@/app/libs/types';
@@ -15,6 +16,8 @@ export default async function Layout({ children }: { children: React.ReactNode }
         const user: User = session.user as User;
         const habits: Habit[] = await fetchHabits({ userId: user.id! });
         const entries: Entry[] = await fetchEntries({ habits });
+        await updateProfileSummary({ userId: user.id! });
+        await updateWeekSummary({ userId: user.id! });
 
         return (
             <div className="flex min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-300">

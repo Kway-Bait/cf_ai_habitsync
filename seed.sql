@@ -7,8 +7,8 @@ DELETE FROM users;
 INSERT INTO users (id, name, email)
 VALUES (
     'b02c3cc8-0844-40b8-850e-93f7ef3060ba', 
-    'user',
-    'user@gmail.com'
+    'Ke Wei Yong',
+    'keweiyong07@gmail.com'
 );
 
 -- =========================

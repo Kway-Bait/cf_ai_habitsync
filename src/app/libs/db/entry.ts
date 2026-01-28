@@ -3,6 +3,7 @@
 import { getCloudflareContext } from '@opennextjs/cloudflare';
 import { Entry } from '@/app/libs/types';
 
+// TODO: Improve entry query to directly check user_id through foreign key
 export async function dbGetEntries({
     habitId,
 } : {

@@ -32,10 +32,7 @@ export async function chatWithAI({
     await dbCreateMessage({ userId, role: 'user', content: message });
 
     const habits = await dbGetHabits({ userId });
-    const entries = (await Promise.all(habits.map(async (habit) => {
-        const entry = await dbGetEntries({ habitId: habit.id });
-        return entry;
-    }))).flat();
+    const entries = await dbGetEntries({ userId });
 
     const profileSummary = await dbGetProfileSummary({ userId });
     const weekSummary = await dbGetHabitSummaries({ userId });
@@ -54,9 +51,6 @@ export async function chatWithAI({
             weekSummary: weekSummaryString,
             recentPerformance
         });
-
-        // await new Promise((resolve) => setTimeout(resolve, 3000));
-        // const response = "Ok bro keep testing";
 
         await dbCreateMessage({ userId, role: 'assistant', content: response });
         refresh();

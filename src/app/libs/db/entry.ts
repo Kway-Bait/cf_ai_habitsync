@@ -5,19 +5,22 @@ import { Entry } from '@/app/libs/types';
 
 // TODO: Improve entry query to directly check user_id through foreign key
 export async function dbGetEntries({
-    habitId,
+    userId,
 } : {
-    habitId: string,
+    userId: string,
 }): Promise<Entry[]> {
     const { env } = getCloudflareContext();
     const { results } = await env.habitDB.prepare(`
-        SELECT habit_id, COUNT(*) AS [count], completed_on, created_at
-        FROM entries
-        WHERE habit_id = ?
-        GROUP BY completed_on
+        SELECT e.habit_id, COUNT(*) AS [count], e.completed_on, e.created_at
+        FROM entries e
+        JOIN habits h ON h.id = e.habit_id
+        WHERE h.user_id = ?
+        GROUP BY e.completed_on;
     `)
-        .bind(habitId)
+        .bind(userId)
         .run();
+    
+    console.log({ results });
 
     let data: Entry[] = results.map((result) => ({
             habitId: (result.habit_id as number).toString(),

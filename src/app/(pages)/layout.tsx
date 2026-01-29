@@ -15,7 +15,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
     } else {
         const user: User = session.user as User;
         const habits: Habit[] = await fetchHabits({ userId: user.id! });
-        const entries: Entry[] = await fetchEntries({ habits });
+        const entries: Entry[] = await fetchEntries({ userId: user.id! });
         await updateProfileSummary({ userId: user.id! });
         await updateWeekSummary({ userId: user.id! });
 

@@ -7,20 +7,15 @@ import { dbGetEntries } from '@/app/libs/db/entry';
 export async function fetchHabits({ 
     userId
 } : {
-    userId: string
+    userId: string,
 }): Promise<Habit[]> {
     return await dbGetHabits({ userId });
 }
 
 export async function fetchEntries({
-    habits
+    userId,
 } : {
-    habits: Habit[]
+    userId: string,
 }): Promise<Entry[]> {
-    const results = await Promise.all(habits.map(async (habit) => {
-        const result = await dbGetEntries({ habitId: habit.id });
-        return result;
-    }));
-
-    return results.flat();
+    return await dbGetEntries({ userId });
 }

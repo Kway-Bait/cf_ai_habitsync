@@ -26,10 +26,7 @@ export async function updateProfileSummary({
 
     if (differenceInCalendarWeeks(Date(), lastUpdatedTime) >= 2){
         const habits = await dbGetHabits({ userId });
-        const entries = (await Promise.all(habits.map(async (habit) => {
-            const entry = await dbGetEntries({ habitId: habit.id });
-            return entry;
-        }))).flat();
+        const entries = await dbGetEntries({ userId });
 
         const weekSummary: HabitWeekSummary[] = await dbGetHabitSummaries({ userId });
         const recentPerformance: string = calculateRecentPerformance({ habits, entries, weeks: 2 });
@@ -58,10 +55,7 @@ export async function updateWeekSummary({
 
     if (!lastHabitSummary.periodStart || differenceInCalendarWeeks(Date(), parseISO(lastHabitSummary.periodEnd)) >= 1) {
         const habits = await dbGetHabits({ userId });
-        const entries = (await Promise.all(habits.map(async (habit) => {
-            const entry = await dbGetEntries({ habitId: habit.id });
-            return entry;
-        }))).flat();
+        const entries = await dbGetEntries({ userId });
 
         const recentPerformance: string = calculateRecentPerformance({ habits, entries, weeks: 1 });
         const weekSummary = await generateWeekSummary({ recentPerformance });

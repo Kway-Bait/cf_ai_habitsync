@@ -3,7 +3,6 @@
 import { getCloudflareContext } from '@opennextjs/cloudflare';
 import { Entry } from '@/app/libs/types';
 
-// TODO: Improve entry query to directly check user_id through foreign key
 export async function dbGetEntries({
     userId,
 } : {
@@ -19,8 +18,6 @@ export async function dbGetEntries({
     `)
         .bind(userId)
         .run();
-    
-    console.log({ results });
 
     let data: Entry[] = results.map((result) => ({
             habitId: (result.habit_id as number).toString(),

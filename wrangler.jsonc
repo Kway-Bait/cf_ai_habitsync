@@ -26,20 +26,4 @@
     "ai": {
         "binding": "AI",
     },
-    "vars": {
-        "GOOGLE_OAUTH_CLIENT_ID": "***REMOVED***",
-        "GOOGLE_OAUTH_CLIENT_SECRET": "***REMOVED***",
-        "NEXTAUTH_URL": "http://localhost:3000",
-        "NEXTAUTH_SECRET": "***REMOVED***",
-    },
-    "env": {
-        "production": {
-            "vars": {
-                "GOOGLE_OAUTH_CLIENT_ID": "***REMOVED***",
-                "GOOGLE_OAUTH_CLIENT_SECRET": "***REMOVED***",
-                "NEXTAUTH_URL": "https://habit-tracker.keweiyong07.workers.dev",
-                "NEXTAUTH_SECRET": "***REMOVED***",
-            }
-        }
-    }
 }

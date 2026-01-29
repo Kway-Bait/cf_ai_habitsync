@@ -1,63 +1,100 @@
-# Next.js Framework Starter
+# HabitSync
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/next-starter-template)
+A Next.js web application built for a Cloudflare application assessment. This repository contains the front-end and server-side code for a habit-tracking app that demonstrates modern web patterns, Cloudflare integration options, and operational best practices for security, performance, and reliability.
 
-<!-- dash-content-start -->
+## Project overview
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app). It's deployed on Cloudflare Workers as a [static website](https://developers.cloudflare.com/workers/static-assets/).
+HabitSync is a Next.js application for tracking daily habits, with a focus on being deployable and testable on Cloudflare infrastructure. It demonstrates:
 
-This template uses [OpenNext](https://opennext.js.org/) via the [OpenNext Cloudflare adapter](https://opennext.js.org/cloudflare), which works by taking the Next.js build output and transforming it, so that it can run in Cloudflare Workers.
+- Server-side and client-side rendering with Next.js
+- Integration options for Cloudflare Workers
 
-<!-- dash-content-end -->
+### Features
 
-Outside of this repo, you can start a new project with this template using [C3](https://developers.cloudflare.com/pages/get-started/c3/) (the `create-cloudflare` CLI):
+- User sign-up/sign-in with Google OAUTH
+- Create, edit, and complete habits
+- Progress analytics/streaks (UI + sample computations)
+- Edge-friendly routing
+- Configurable environment variables for external services (DB, storage)
+- Example CI/CD pipeline to deploy to Cloudflare
 
-```bash
-npm create cloudflare@latest -- --template=cloudflare/templates/next-starter-template
+### Tech stack
+
+- Next.js (React)
+- TypeScript
+- Tailwind for styling
+- Cloudflare Workers for deployment
+- D1 for storage
+
+## Getting started
+
+### Prerequisites
+
+- Node.js (16+ recommended; match the Node version used in your repo)
+- npm / pnpm / yarn
+- Cloudflare account for Workers deployment
+- (Optional) Wrangler CLI for Workers: `npm i -g wrangler`
+
+### Local Development
+
+1. Clone the repo
+   - `git clone https://github.com/Kway-Bait/cf_ai_habitsync.git`
+   - `cd cf_ai_habitsync`
+
+2. Install dependencies
+   - npm install
+   - or pnpm install
+   - or yarn
+
+3. Create a `.env` based on `.env.example`. Add required environment variables (see below).
+
+4. Build database schema 
+    - `wrangler d1 execute <db_name> --local --file="./schame.sql"`
+
+5. Run development server
+   - `npm run dev`
+   - open [http://localhost:3000](http://localhost:3000)
+
+### Scripts
+
+- `dev` — Start Next.js in development mode
+- `build` — Build the production app
+- `start` — Start the production server (if applicable)
+- `test` — Run tests
+
+### Environment variables
+
+Add a `.env`. Example variables for this project and replace with actual names used in your code:
+
+```
+GOOGLE_OAUTH_CLIENT_ID=
+GOOGLE_OAUTH_CLIENT_SECRET=
+NEXTAUTH_URL=
+NEXTAUTH_SECRET=
 ```
 
-A live public deployment of this template is available at [https://next-starter-template.templates.workers.dev](https://next-starter-template.templates.workers.dev)
+## Deployment to Cloudflare
 
-## Getting Started
+### Cloudflare Workers
 
-First, run:
+If you require Workers for custom edge logic:
 
-```bash
-npm install
-# or
-yarn install
-# or
-pnpm install
-# or
-bun install
-```
+1. Install Wrangler CLI: `npm i -g wrangler`
+2. Configure `wrangler.jsonc`:
+   - Add account_id, project name, compatibility flags, and routes.
+3. Build for Workers or use a Next.js adapter for Workers.
+4. Publish: `wrangler publish`
 
-Then run the development server (using the package manager of your choice):
+Useful links:
+- Wrangler docs: https://developers.cloudflare.com/workers/wrangler/
+- Deploy Next.js on Workers (adapter info): https://developers.cloudflare.com/
 
-```bash
-npm run dev
-```
+### CI / CD
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Recommended approaches:
+- Use Cloudflare Workers' Git integration for automatic builds on push.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Secret management:
+- Store API tokens in Cloudflare Workers environment settings or GitHub Actions secrets.
+- Limit token scopes to the minimum required.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Deploying To Production
-
-| Command                           | Action                                       |
-| :-------------------------------- | :------------------------------------------- |
-| `npm run build`                   | Build your production site                   |
-| `npm run preview`                 | Preview your build locally, before deploying |
-| `npm run build && npm run deploy` | Deploy your production site to Cloudflare    |
-| `npm wrangler tail`               | View real-time logs for all Workers          |
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
